@@ -176,6 +176,12 @@ class DurationTest < ActiveSupport::TestCase
     cased = case 1.day when 1.day then "ok" end
     assert_equal cased, "ok"
   end
+    
+  def test_flatten_duration
+    assert_nothing_raised do
+      [1.minute].flatten(1)
+    end
+  end  
 
   protected
     def with_env_tz(new_tz = 'US/Eastern')
