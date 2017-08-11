@@ -236,7 +236,15 @@ module ActionDispatch
 
     def call(env)
       if (session = env['rack.session']) && (flash = session['flash'])
-        flash.sweep
+        if flash.respond_to?(:sweep) # rails 3.2 it's a FlashHash
+          flash.sweep
+        else # from rails 4.x to rails 3.2
+          flash_obj = FlashHash.new
+          flash_obj.instance_variable_set(:@used, Set.new(flash['discard']))
+          flash_obj.instance_variable_set(:@flashes, flash['flashes'])
+          flash_obj.sweep
+          session['flash'] = flash_obj
+        end
       end
 
       @app.call(env)
