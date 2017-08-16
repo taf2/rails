@@ -71,6 +71,7 @@ module ActiveRecord
     end
 
     def _update_record(values, id, id_was) # :nodoc:
+      return false if (id.nil? && id_was.nil?) # if both are nil abort
       substitutes, binds = substitute_values values
 
       scope = @klass.unscoped
