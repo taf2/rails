@@ -81,13 +81,13 @@ module ActiveRecord
       end
 
       primary_key_column = @klass.primary_key
-      return false if primary_key_column.nil?
+      return false if primary_key_column.blank?
 
-      relation = scope.where(@klass.primary_key => (id_was || id))
+      relation = scope.where(primary_key_column => (id_was || id))
       bvs = binds + relation.bind_values
       um = relation
         .arel
-        .compile_update(substitutes, @klass.primary_key)
+        .compile_update(substitutes, primary_key_column)
 
       @klass.connection.update(
         um,
