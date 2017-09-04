@@ -80,6 +80,9 @@ module ActiveRecord
         scope.unscope!(where: @klass.inheritance_column)
       end
 
+      primary_key_column = @klass.primary_key
+      return false if primary_key_column.nil?
+
       relation = scope.where(@klass.primary_key => (id_was || id))
       bvs = binds + relation.bind_values
       um = relation
